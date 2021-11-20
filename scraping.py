@@ -138,7 +138,7 @@ def get_interval_months(start, end):
     
     return interval_list
 
-def download_file(url, path, filename):
+def download_file(url, path, filename, file_format):
     """
     Download file and save on local machine.
     
@@ -157,6 +157,6 @@ def download_file(url, path, filename):
     """
 
     response = requests.get(url)
-    with open(f'{path}/{filename}.xls', 'wb') as output:
+    with open(f'{path}/{filename}.{file_format}', 'wb') as output:
         output.write(response.content)
         output.close()

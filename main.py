@@ -4,8 +4,9 @@ from scraping import get_interval_months, download_file, set_type_list
 
 # set variables
 type_list = 1 # 1 - Preços de Medicamentos (Preço Fábrica e Preço Máximo ao Consumidor) | 2 - Preços de Medicamentos para Compras Públicas
-start_month = '01/21' # 'mm/YY'
-end_month = '07/21' # 'mm/YY'
+start_month = '01/20' # 'mm/YY'
+end_month = '07/20' # 'mm/YY'
+file_format = 'pdf'
 path = 'downloads'
 
 # get html from website
@@ -22,7 +23,7 @@ tag_p = type_list_content.find_all('p')
 interval = get_interval_months(start_month, end_month)
 
 # set path's name to save files
-name_path = interval[0].replace('/', '-') + '_' + interval[len(interval)-1].replace('/', '-') + '_' + str(type_list)
+name_path = interval[0].replace('/', '-') + '_' + interval[len(interval)-1].replace('/', '-') + '_' + str(type_list) + '_' + str(file_format)
 
 # check if folder exists
 if not os.path.exists(path):
@@ -50,7 +51,7 @@ for month in interval:
                 tag_a = html.find_all('a')
                 
                 for a in tag_a:
-                    if a.text.strip() == 'XLS':
+                    if a.text.strip().lower() == file_format:
                         print(a.get('href'))
                         filename = month.replace('/', '-') + '_' + str(type_list)
-                        download_file(a.get('href'), f'{path}/{name_path}', filename)
+                        download_file(a.get('href'), f'{path}/{name_path}', filename, file_format)
