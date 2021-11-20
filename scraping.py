@@ -4,14 +4,43 @@ from datetime import date
 from bs4 import BeautifulSoup
 from dateutil.relativedelta import relativedelta
 
-def list_to_string_formatter(s):
-    str1 = ''
-    for ele in s: 
-        str1 += str(ele)
+def list_to_string_formatter(array):
+    """
+    Format a tags list on unique string.
+    
+    Parameters
+    ----------
+    array : list
+        list of tags
+    
+    Returns
+    ----------
+    string : str
+        list formatted to word.
+    """
+    string = ''
+    for tag in array: 
+        string += str(tag)
         
-    return str1
+    return string
 
 def set_type_list(type_list, full_content):
+    """
+    Set html content by type list required.
+    
+    Parameters
+    ----------
+    type_list : int
+        number of type list
+    full_content : Tag
+        all tags inside journal-content-article's div
+
+    Returns
+    ----------
+    html : Tag
+        tags about type list required
+    """
+    
     customer = []
     for c in full_content:
         if str(c.text).strip() != '':
@@ -21,12 +50,12 @@ def set_type_list(type_list, full_content):
                 customer.append(c)
 
     public = []
-    for i in range(len(full_content)):
+    for p in range(len(full_content)):
         try:
-            if customer[i] == full_content[i]:
+            if customer[p] == full_content[p]:
                 pass
         except:
-            public.append(full_content[i])
+            public.append(full_content[p])
     
     if type_list == 1:
         return BeautifulSoup(list_to_string_formatter(customer), 'html.parser')
@@ -37,6 +66,20 @@ def set_type_list(type_list, full_content):
         sys.exit()
 
 def get_month_name(month):
+    """
+    Get month's name by month's number.
+    
+    Parameters
+    ----------
+    month : str
+        number of month
+
+    Returns
+    ----------
+    month : str
+        name of month
+    """
+
     with open('months.json', 'r') as output:
         data = json.load(output)
         for i in data:
@@ -45,11 +88,43 @@ def get_month_name(month):
 
         output.close()
 
-def input_formatter_month(month):
-    month = month.split("/")
-    return int(month[0]), int(month[1])
+def input_formatter_month(date):
+    """
+    Split date input in month and year.
+    
+    Parameters
+    ----------
+    date : str
+        date with month and year
+
+    Returns
+    ----------
+    month : int
+        month splitted 
+    year : int
+        year splitted
+    """
+
+    date = date.split("/")
+    return int(date[0]), int(date[1])
 
 def get_interval_months(start, end):
+    """
+    Get interval months by dates required.
+    
+    Parameters
+    ----------
+    start : str
+        start date with month and year
+    end : str
+        end date with month and year
+
+    Returns
+    ----------
+    interval_list : list
+        list of all months inside interval required
+    """
+    
     m, y = input_formatter_month(start)
     start_date = date(int(f"20{y}"), m, 1)
     m, y = input_formatter_month(end)
@@ -64,6 +139,23 @@ def get_interval_months(start, end):
     return interval_list
 
 def download_file(url, path, filename):
+    """
+    Download file and save on local machine.
+    
+    Parameters
+    ----------
+    url : str
+        url to download file
+    path : str
+        name of folder to save
+    filename : str
+        name of the file
+
+    Returns
+    ----------
+    None
+    """
+
     response = requests.get(url)
     with open(f'{path}/{filename}.xls', 'wb') as output:
         output.write(response.content)
