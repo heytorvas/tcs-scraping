@@ -4,9 +4,9 @@ from scraping import get_interval_months, download_file, set_type_list
 
 # set variables
 type_list = 1 # 1 - Preços de Medicamentos (Preço Fábrica e Preço Máximo ao Consumidor) | 2 - Preços de Medicamentos para Compras Públicas
-start_month = '01/20' # 'mm/YY'
-end_month = '07/20' # 'mm/YY'
-file_format = 'pdf'
+start_month = '01/19' # 'mm/YY'
+end_month = '01/21' # 'mm/YY'
+file_format = 'xls' # 'xls' | 'pdf'
 path = 'downloads'
 
 # get html from website
